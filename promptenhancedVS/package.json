@@ -20,21 +20,35 @@
     "commands": [
       {
         "command": "promptenhanced.openSettings",
-        "title": "⚙️ 設定面板",
+        "title": "設定面板",
         "category": "PromptEnhanced",
         "icon": "$(gear)"
       },
       {
         "command": "promptenhanced.openOptimizer",
-        "title": "✨ 提示詞優化面板",
+        "title": "提示詞優化面板",
         "category": "PromptEnhanced",
         "icon": "$(sparkle)"
       },
       {
         "command": "promptenhanced.checkConfig",
-        "title": "📋 檢查配置狀態",
+        "title": "檢查配置狀態",
         "category": "PromptEnhanced",
         "icon": "$(checklist)"
+      },
+      {
+        "command": "promptenhanced.quickOptimize",
+        "title": "快速優化提示詞",
+        "category": "PromptEnhanced",
+        "icon": "$(zap)"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "promptenhanced.quickOptimize",
+        "key": "alt+p",
+        "mac": "alt+p",
+        "when": "editorTextFocus || inChatInput"
       }
     ],
     "viewsContainers": {

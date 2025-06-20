@@ -20,13 +20,18 @@ interface GeminiResponse {
 
 export class GeminiService {
 	private getConfiguration() {
-		const config = vscode.workspace.getConfiguration('promptenhanced');
-		return {
-			apiKey: config.get('geminiApiKey', ''),
-			modelId: config.get('geminiModelId', 'gemini-2.0-flash-exp'),
-			enhancementTemplate: config.get('enhancementTemplate', '請優化以下提示詞，使其更清晰、具體且有效：\n\n{{prompt}}'),
-			translateToEnglish: config.get('translateToEnglish', false)
-		};
+		try {
+			const config = vscode.workspace.getConfiguration('promptenhanced');
+			return {
+				apiKey: config.get('geminiApiKey', ''),
+				modelId: config.get('geminiModelId', 'gemini-2.0-flash-exp'),
+				enhancementTemplate: config.get('enhancementTemplate', '請優化以下提示詞，使其更清晰、具體且有效：\n\n{{prompt}}'),
+				translateToEnglish: config.get('translateToEnglish', false)
+			};
+		} catch (error) {
+			console.error('無法訪問工作區配置:', error);
+			throw new Error('無法訪問配置，請確保在正確的工作區中使用此功能');
+		}
 	}
 
 	private validateConfiguration() {
