@@ -1,0 +1,505 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #202123; /* 深色背景，模擬內容頁面 */
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 400px;
+    max-height: 90vh;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.05); /* 半透明白色，模擬毛玻璃 */
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); /* 更深的陰影 */
+    margin: 20px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 輕微的邊框 */
+}
+
+h1 {
+    text-align: center;
+    color: #f0f0f0; /* 淺色文字 */
+    margin-bottom: 25px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #e0e0e0; /* 淺色文字 */
+    font-weight: 500;
+    font-size: 14px;
+}
+
+input[type="password"], 
+select, 
+textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.1); /* 半透明邊框 */
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.05); /* 半透明背景 */
+    color: #f0f0f0; /* 淺色文字 */
+}
+
+.input-group {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+.input-group input {
+    flex: 1;
+    margin: 0;
+}
+
+.input-group button {
+    margin: 0;
+    white-space: nowrap;
+}
+
+input[type="password"]:focus, 
+select:focus, 
+textarea:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.3); /* 焦點時更亮的邊框 */
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1); /* 焦點陰影 */
+    background-color: rgba(255, 255, 255, 0.1); /* 焦點時更亮的背景 */
+}
+
+button {
+    background: rgba(255, 255, 255, 0.1); /* 半透明白色按鈕 */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 邊框 */
+    color: white; /* 白色文字 */
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.2); /* 懸停時更透明 */
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: none; /* 移除位移效果 */
+    box-shadow: none; /* 移除陰影 */
+}
+
+button:active {
+    background: rgba(255, 255, 255, 0.15); /* 點擊時輕微變色 */
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.save-btn {
+    background: rgba(76, 175, 80, 0.1); /* 綠色透明 */
+    border: 1px solid rgba(76, 175, 80, 0.3); /* 綠色邊框 */
+    color: #4CAF50; /* 綠色文字 */
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.save-btn:hover {
+    background: rgba(76, 175, 80, 0.2); /* 懸停時更透明 */
+    border-color: rgba(76, 175, 80, 0.4);
+}
+
+#testApiKey {
+    background: rgba(33, 150, 243, 0.1); /* 藍色透明 */
+    border: 1px solid rgba(33, 150, 243, 0.3); /* 藍色邊框 */
+    color: #2196F3; /* 藍色文字 */
+    padding: 12px 16px;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+#testApiKey:hover {
+    background: rgba(33, 150, 243, 0.2); /* 懸停時更透明 */
+    border-color: rgba(33, 150, 243, 0.4);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+small {
+    color: #bbb; /* 淺灰色文字 */
+    font-size: 12px;
+    display: block;
+    margin-top: 4px;
+}
+
+/* 移除原有的 status 相關樣式 */
+/*
+.status {
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    margin-top: 10px;
+    display: none;
+}
+
+.status.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status.loading {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+*/
+
+select:disabled {
+    background-color: rgba(255, 255, 255, 0.03); /* 更暗的禁用背景 */
+    color: #999; /* 淺灰色文字 */
+}
+
+.popup-status-notice {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    text-align: center;
+    white-space: nowrap;
+    background-color: rgba(255, 107, 107, 0.8); /* 紅色透明 */
+}
+
+.popup-status-notice.success {
+    background-color: rgba(76, 175, 80, 0.8); /* 綠色透明 */
+}
+
+.popup-status-notice.error {
+    background-color: rgba(244, 67, 54, 0.8); /* 紅色透明 */
+}
+
+.popup-status-notice.loading {
+    background-color: rgba(33, 150, 243, 0.8); /* 藍色透明 */
+}
+
+/* 新增的樣式 */
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+.clear-btn {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    flex: 1;
+}
+
+.clear-btn:hover {
+    background: linear-gradient(135deg, #ff5252 0%, #e53935 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+}
+
+.save-btn {
+    flex: 1;
+}
+
+.advanced-settings {
+    background: rgba(255, 255, 255, 0.03); /* 半透明背景 */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.08); /* 輕微邊框 */
+}
+
+.setting-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+    gap: 8px;
+}
+
+.setting-item:last-child {
+    margin-bottom: 0;
+}
+
+.setting-item input[type="checkbox"] {
+    margin: 0;
+    width: auto;
+}
+
+.setting-item label {
+    margin: 0;
+    font-size: 13px;
+    color: #ddd; /* 淺色文字 */
+}
+
+.setting-item select {
+    margin-left: auto;
+    padding: 4px 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1); /* 半透明邊框 */
+    border-radius: 4px;
+    font-size: 12px;
+    width: auto;
+    background: rgba(255, 255, 255, 0.05); /* 半透明背景 */
+    color: #f0f0f0; /* 淺色文字 */
+    /* 新增樣式來處理下拉選單打開時的視覺問題 */
+    -webkit-appearance: none; /* 移除瀏覽器預設樣式 */
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23f0f0f0%22%20d%3D%22M200.75%2C87.31a12%2C12%2C0%2C0%2C0%2C-17%2C0L128%2C142.06%2C72.25%2C87.31a12%2C12%2C0%2C0%2C0%2C-17%2C17l64%2C63.94a12%2C12%2C0%2C0%2C0%2C17%2C0l64-63.94A12%2C12%2C0%2C0%2C0%2C200.75%2C87.31Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E'); /* 自定義向下箭頭 */
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 25px; /* 為箭頭騰出空間 */
+}
+
+/* 針對下拉選單的選項樣式 */
+select option {
+    background-color: #2a2c30; /* 深色背景 */
+    color: #f0f0f0; /* 淺色文字 */
+    padding: 8px; /* 增加內邊距 */
+}
+
+/* 針對下拉選單選中項目的樣式 */
+select option:checked,
+select option:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
+    color: #2196F3; /* 藍色文字 */
+}
+
+.shortcuts-info {
+    background: rgba(33, 150, 243, 0.15); /* 藍色透明背景 */
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px solid rgba(33, 150, 243, 0.1); /* 輕微邊框 */
+}
+
+.shortcuts-info h4 {
+    margin: 0 0 10px 0;
+    color: #2196F3; /* 藍色文字 */
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.shortcut-item {
+    margin-bottom: 8px;
+    font-size: 12px;
+    color: #ccc; /* 淺灰色文字 */
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.shortcut-item:last-child {
+    margin-bottom: 0;
+}
+
+kbd {
+    background: rgba(33, 150, 243, 0.2); /* 藍色透明背景 */
+    color: #2196F3; /* 藍色文字 */
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: monospace;
+}
+
+/* 可行性驗證樣式 */
+.feasibility-check {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.feasibility-check input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+    cursor: pointer;
+    accent-color: #4CAF50;
+    margin-top: 2px;
+}
+
+.feasibility-check-content {
+    flex: 1;
+}
+
+.feasibility-check label {
+    margin: 0 0 4px 0;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+}
+
+.feasibility-check small {
+    margin: 0;
+    font-size: 12px;
+    color: #bbb;
+    display: block;
+}
+
+/* 可行性結果彈窗樣式 */
+.feasibility-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+}
+
+.feasibility-modal-content {
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 24px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.feasibility-modal h3 {
+    color: #f0f0f0;
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.feasibility-section {
+    margin-bottom: 16px;
+}
+
+.feasibility-section h4 {
+    color: #e0e0e0;
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.feasibility-section p {
+    color: #ccc;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.difficulty-stars {
+    color: #ffd700;
+    font-size: 16px;
+    margin-left: 8px;
+}
+
+.tools-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.tool-tag {
+    background: rgba(33, 150, 243, 0.2);
+    color: #2196F3;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.feasibility-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+.feasibility-actions button {
+    margin: 0;
+    padding: 10px 20px;
+}
+
+.continue-btn {
+    background: rgba(76, 175, 80, 0.2);
+    border: 1px solid rgba(76, 175, 80, 0.4);
+    color: #4CAF50;
+}
+
+.continue-btn:hover {
+    background: rgba(76, 175, 80, 0.3);
+}
+
+.cancel-btn {
+    background: rgba(244, 67, 54, 0.2);
+    border: 1px solid rgba(244, 67, 54, 0.4);
+    color: #f44336;
+}
+
+.cancel-btn:hover {
+    background: rgba(244, 67, 54, 0.3);
+}
+
+.not-feasible {
+    background: rgba(244, 67, 54, 0.1);
+    border: 1px solid rgba(244, 67, 54, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+.not-feasible h4 {
+    color: #f44336;
+    margin: 0 0 8px 0;
+} 

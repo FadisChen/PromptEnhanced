@@ -1,0 +1,1149 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ Prompt 強化器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #202123;
+            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            min-height: calc(100vh - 60px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background-clip: text;
+        }
+
+        .header p {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .input-section {
+            margin-bottom: 20px;
+        }
+
+        .input-section label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        #promptInput {
+            width: 100%;
+            min-height: calc(100vh - 400px);
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+
+        #promptInput:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .button-section {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid rgba(255, 165, 0, 0.3);
+            color: #ffa500;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 165, 0, 0.2);
+            border-color: rgba(255, 165, 0, 0.4);
+        }
+
+        .btn-settings {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        .btn-settings:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading-spinner {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #f0f0f0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #ccc;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            color: #f0f0f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #f0f0f0;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        .input-group button {
+            flex-shrink: 0;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .notice {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1001;
+            max-width: 300px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            animation: slideInFromRight 0.3s ease-out;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notice.success {
+            background: linear-gradient(135deg, #4caf50 0%, #45a049 100%);
+        }
+
+        .notice.error {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        }
+
+        .notice.warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+        }
+
+        .notice.info {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        }
+
+        @keyframes slideInFromRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        kbd {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 500;
+            font-family: monospace;
+        }
+
+        .feasibility-section {
+            margin-bottom: 16px;
+        }
+
+        .feasibility-section h4 {
+            color: #e0e0e0;
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .feasibility-section p {
+            color: #ccc;
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .difficulty-stars {
+            color: #ffd700;
+            font-size: 16px;
+            margin-left: 8px;
+        }
+
+        .tools-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .tool-tag {
+            background: rgba(33, 150, 243, 0.2);
+            color: #2196F3;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid rgba(33, 150, 243, 0.3);
+            font-weight: 500;
+        }
+
+        .not-feasible {
+            background: rgba(244, 67, 54, 0.1);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .not-feasible h4 {
+            color: #f44336;
+            margin: 0 0 8px 0;
+        }
+
+        .not-feasible p {
+            color: #ffcdd2;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .button-section {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        #modelSelect {
+            margin-left: auto;
+            padding: 4px 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1); /* 半透明邊框 */
+            border-radius: 4px;
+            font-size: 12px;
+            width: auto;
+            background: rgba(255, 255, 255, 0.05); /* 半透明背景 */
+            color: #f0f0f0; /* 淺色文字 */
+            /* 新增樣式來處理下拉選單打開時的視覺問題 */
+            -webkit-appearance: none; /* 移除瀏覽器預設樣式 */
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20256%20256%22%3E%3Cpath%20fill%3D%22%23f0f0f0%22%20d%3D%22M200.75%2C87.31a12%2C12%2C0%2C0%2C0%2C-17%2C0L128%2C142.06%2C72.25%2C87.31a12%2C12%2C0%2C0%2C0%2C-17%2C17l64%2C63.94a12%2C12%2C0%2C0%2C0%2C17%2C0l64-63.94A12%2C12%2C0%2C0%2C0%2C200.75%2C87.31Z%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E'); /* 自定義向下箭頭 */
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 25px; /* 為箭頭騰出空間 */
+        }
+
+        /* 針對下拉選單的選項樣式 */
+        select option {
+            background-color: #2a2c30; /* 深色背景 */
+            color: #f0f0f0; /* 淺色文字 */
+            padding: 8px; /* 增加內邊距 */
+        }
+
+        /* 針對下拉選單選中項目的樣式 */
+        select option:checked,
+        select option:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* 半透明白色背景 */
+            color: #2196F3; /* 藍色文字 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✨ Prompt 強化器</h1>
+            <p>使用 AI 優化您的 Prompt，支援可行性評估和智能建議</p>
+        </div>
+
+        <div class="input-section">
+            <textarea id="promptInput" placeholder="請在此輸入您的 prompt 內容..."></textarea>
+        </div>
+
+        <div class="button-section">
+            <button id="enhanceBtn" class="btn btn-primary">
+                <span class="btn-icon">✨</span>
+                <span class="btn-text">優化 Prompt</span>
+            </button>
+            <button id="undoBtn" class="btn btn-secondary" style="display: none;">
+                <span>↶</span>
+                <span>還原</span>
+            </button>
+            <button id="settingsBtn" class="btn btn-settings">
+                <span>⚙️</span>
+                <span>設定</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 設定彈出視窗 -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>設定</h3>
+                <button class="close-btn" onclick="closeModal('settingsModal')">&times;</button>
+            </div>
+
+            <div class="form-group">
+                <label for="apiKey">Gemini API Key</label>
+                <div class="input-group">
+                    <input type="password" id="apiKey" placeholder="輸入您的 Gemini API Key">
+                    <button id="testApiKeyBtn" class="btn btn-primary">測試</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="modelSelect">Gemini 模型</label>
+                <select id="modelSelect" disabled>
+                    <option value="">請先設定 API Key</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="template">優化 Prompt 模板 [使用 {{prompt}} 代表原始內容]</label>
+                <textarea id="template" rows="8"></textarea>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="enableFeasibilityCheck">
+                    <label for="enableFeasibilityCheck">啟用可行性驗證</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button id="saveSettingsBtn" class="btn btn-primary" style="width: 100%;">儲存設定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 可行性評估結果彈出視窗 -->
+    <div id="feasibilityModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>可行性評估結果</h3>
+                <button class="close-btn" onclick="closeModal('feasibilityModal')">&times;</button>
+            </div>
+            <div id="feasibilityContent">
+                <!-- 動態內容 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局狀態管理
+        let originalPrompt = '';
+        let isOptimized = false;
+        const defaultTemplate = `# 指令
+
+你是一個專門優化提示詞（Prompt）的 AI 專家。
+你的任務是根據我提供的「原始提示詞」，將其改寫為一個更清晰、更具體、結構更完整的提示詞，以引導 AI 模型產生更優質、更精準的輸出。
+
+# 規則
+
+- **絕對禁止**在你的回覆中包含任何解釋、前言、或任何形式的說明文字。
+- 你的回覆**只能也必須**是優化後的提示詞內容本身。
+- 不要使用引號或任何標記來包圍你的輸出。直接呈現純文字結果。
+
+# 原始提示詞
+
+{{prompt}}
+
+# 優化後的提示詞`;
+
+        let settings = {
+            apiKey: '',
+            selectedModel: '',
+            template: defaultTemplate, // 初始化時使用預設模板
+            enableFeasibilityCheck: false
+        };
+
+        // DOM 元素
+        const promptInput = document.getElementById('promptInput');
+        const enhanceBtn = document.getElementById('enhanceBtn');
+        const undoBtn = document.getElementById('undoBtn');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsModal = document.getElementById('settingsModal');
+        const feasibilityModal = document.getElementById('feasibilityModal');
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSettings();
+            setupEventListeners();
+            
+            // 顯示歡迎訊息
+            setTimeout(() => {
+                showNotice('歡迎使用 Prompt 強化器！請先在設定中配置 API Key', 'info');
+            }, 1000);
+        });
+
+        // 設置事件監聽器
+        function setupEventListeners() {
+            enhanceBtn.addEventListener('click', handleEnhance);
+            undoBtn.addEventListener('click', handleUndo);
+            settingsBtn.addEventListener('click', () => openModal('settingsModal'));
+            
+            document.getElementById('testApiKeyBtn').addEventListener('click', testApiKey);
+            document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+            
+            // 快捷鍵
+            document.addEventListener('keydown', handleKeyboardShortcut);
+            
+            // 點擊模態框背景關閉
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    closeModal(e.target.id);
+                }
+            });
+        }
+
+        // 載入設定
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem('promptEnhancerSettings');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    // 合併設定，但如果 template 為空則使用 defaultTemplate
+                    settings = {
+                        ...settings,
+                        ...parsed,
+                        template: parsed.template === '' ? defaultTemplate : (parsed.template || defaultTemplate)
+                    };
+                }
+                
+                // 更新 UI
+                document.getElementById('apiKey').value = settings.apiKey || '';
+                document.getElementById('template').value = settings.template; // 直接使用 settings.template
+                document.getElementById('enableFeasibilityCheck').checked = settings.enableFeasibilityCheck || false;
+                
+                if (settings.apiKey) {
+                    loadModels(settings.apiKey);
+                }
+            } catch (error) {
+                console.error('載入設定失敗:', error);
+            }
+        }
+
+        // 儲存設定
+        function saveSettings() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            const selectedModel = document.getElementById('modelSelect').value;
+            const template = document.getElementById('template').value.trim();
+            const enableFeasibilityCheck = document.getElementById('enableFeasibilityCheck').checked;
+            
+            if (!apiKey) {
+                showNotice('請輸入 API Key', 'error');
+                return;
+            }
+            
+            if (!selectedModel) {
+                showNotice('請選擇模型', 'error');
+                return;
+            }
+            
+            if (!template) {
+                showNotice('請輸入強化模板', 'error');
+                return;
+            }
+            
+            if (!template.includes('{{prompt}}')) {
+                showNotice('模板必須包含 {{prompt}} 佔位符', 'error');
+                return;
+            }
+            
+            settings = {
+                apiKey,
+                selectedModel,
+                template,
+                enableFeasibilityCheck
+            };
+            
+            try {
+                localStorage.setItem('promptEnhancerSettings', JSON.stringify(settings));
+                showNotice('設定儲存成功！', 'success');
+                closeModal('settingsModal');
+            } catch (error) {
+                console.error('儲存設定失敗:', error);
+                showNotice('儲存設定失敗', 'error');
+            }
+        }
+
+        // 測試 API Key
+        async function testApiKey() {
+            const apiKey = document.getElementById('apiKey').value.trim();
+            
+            if (!apiKey) {
+                showNotice('請先輸入 API Key', 'error');
+                return;
+            }
+            
+            const testBtn = document.getElementById('testApiKeyBtn');
+            testBtn.disabled = true;
+            testBtn.textContent = '測試中...';
+            
+            try {
+                await loadModels(apiKey);
+                showNotice('API Key 驗證成功！', 'success');
+            } catch (error) {
+                showNotice('API Key 驗證失敗', 'error');
+            } finally {
+                testBtn.disabled = false;
+                testBtn.textContent = '測試';
+            }
+        }
+
+        // 載入模型列表
+        async function loadModels(apiKey) {
+            if (!apiKey) {
+                document.getElementById('modelSelect').innerHTML = '<option value="">請先設定 API Key</option>';
+                document.getElementById('modelSelect').disabled = true;
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                const modelSelect = document.getElementById('modelSelect');
+                
+                // 清空選項
+                modelSelect.innerHTML = '';
+                
+                // 過濾並添加支援 generateContent 的模型
+                const supportedModels = data.models.filter(model =>
+                    model.supportedGenerationMethods &&
+                    model.supportedGenerationMethods.includes('generateContent') &&
+                    model.name.includes('gemini') &&
+                    model.name.includes('flash') &&
+                    !model.name.includes('1.5') &&
+                    !model.name.includes('lite')
+                );
+                
+                if (supportedModels.length === 0) {
+                    modelSelect.innerHTML = '<option value="">沒有可用的模型</option>';
+                    modelSelect.disabled = true;
+                    throw new Error('未找到支援的模型');
+                }
+                
+                supportedModels.forEach(model => {
+                    const option = document.createElement('option');
+                    const modelName = model.name.replace(/^models\//, '');
+                    option.value = modelName;
+                    option.textContent = model.displayName || modelName;
+                    modelSelect.appendChild(option);
+                });
+                
+                // 設定之前選擇的模型
+                if (settings.selectedModel) {
+                    modelSelect.value = settings.selectedModel;
+                }
+                
+                modelSelect.disabled = false;
+                
+            } catch (error) {
+                console.error('載入模型失敗:', error);
+                document.getElementById('modelSelect').innerHTML = '<option value="">載入失敗</option>';
+                document.getElementById('modelSelect').disabled = true;
+                
+                if (error.message.includes('CORS') || error.name === 'TypeError') {
+                    showNotice('CORS 錯誤：請安裝 CORS 擴展或使用代理服務器', 'error');
+                } else {
+                    throw error;
+                }
+            }
+        }
+
+        // 處理優化
+        async function handleEnhance() {
+            const currentPrompt = promptInput.value.trim();
+            
+            if (!currentPrompt) {
+                showNotice('請先輸入 prompt 內容', 'warning');
+                return;
+            }
+            
+            if (!settings.apiKey || !settings.selectedModel || !settings.template) {
+                showNotice('請先在設定中配置 API Key、模型和模板', 'error');
+                return;
+            }
+            
+            if (currentPrompt.length > 4000) {
+                showNotice('Prompt 內容過長，請縮短至 4000 字元以內', 'warning');
+                return;
+            }
+            
+            // 保存原始 prompt
+            originalPrompt = currentPrompt;
+            
+            // 更新按鈕狀態
+            enhanceBtn.disabled = true;
+            enhanceBtn.innerHTML = '<span class="loading-spinner"></span><span>處理中...</span>';
+            
+            try {
+                // 如果啟用可行性檢查
+                if (settings.enableFeasibilityCheck) {
+                    enhanceBtn.innerHTML = '<span class="loading-spinner"></span><span>可行性檢查中...</span>';
+                    
+                    try {
+                        const feasibilityResult = await checkFeasibility(currentPrompt);
+                        showFeasibilityModal(feasibilityResult);
+                    } catch (error) {
+                        console.error('可行性檢查失敗:', error);
+                        showNotice('可行性檢查失敗，將繼續進行優化', 'warning');
+                    }
+                }
+                
+                // 執行優化
+                enhanceBtn.innerHTML = '<span class="loading-spinner"></span><span>優化中...</span>';
+                const enhancedPrompt = await enhancePrompt(currentPrompt);
+                
+                // 更新輸入框
+                promptInput.value = enhancedPrompt;
+                
+                // 設定狀態
+                isOptimized = true;
+                undoBtn.style.display = 'inline-flex';
+                
+                showNotice('Prompt 優化成功！', 'success');
+                
+            } catch (error) {
+                console.error('優化失敗:', error);
+                
+                let errorMessage = '優化失敗';
+                if (error.message.includes('API Key')) {
+                    errorMessage = 'API Key 無效，請檢查設定';
+                } else if (error.message.includes('CORS')) {
+                    errorMessage = 'CORS 錯誤：請安裝 CORS 擴展或使用代理服務器';
+                } else if (error.message.includes('網路')) {
+                    errorMessage = '網路連接失敗，請檢查網路';
+                } else if (error.message.includes('額度')) {
+                    errorMessage = 'API 額度不足，請檢查帳戶';
+                }
+                
+                showNotice(errorMessage, 'error');
+                
+            } finally {
+                enhanceBtn.disabled = false;
+                enhanceBtn.innerHTML = '<span class="btn-icon">✨</span><span class="btn-text">優化 Prompt</span>';
+            }
+        }
+
+        // 處理還原
+        function handleUndo() {
+            if (!originalPrompt || !isOptimized) return;
+            
+            promptInput.value = originalPrompt;
+            originalPrompt = '';
+            isOptimized = false;
+            undoBtn.style.display = 'none';
+            
+            showNotice('已還原到優化前的 Prompt', 'info');
+        }
+
+        // 調用 Gemini API 進行優化
+        async function enhancePrompt(originalPrompt) {
+            const enhancedTemplate = settings.template.replace(/\{\{prompt\}\}/g, originalPrompt);
+            
+            const requestBody = {
+                contents: [{
+                    parts: [{
+                        text: enhancedTemplate
+                    }]
+                }],
+                generationConfig: {
+                    temperature: 0.7,
+                }
+            };
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            
+            try {
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/${settings.selectedModel}:generateContent?key=${settings.apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(requestBody),
+                        signal: controller.signal
+                    }
+                );
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    console.error('API 錯誤回應:', errorText);
+                    
+                    if (response.status === 401) {
+                        throw new Error('無效的 Gemini API Key');
+                    } else if (response.status === 403) {
+                        throw new Error('API Key 權限不足或已超出額度');
+                    } else if (response.status === 429) {
+                        throw new Error('API 調用頻率過高，請稍後再試');
+                    } else {
+                        throw new Error(`API 調用失敗 (${response.status}): ${errorText}`);
+                    }
+                }
+                
+                const data = await response.json();
+                
+                if (!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+                    console.error('API 回應結構異常:', data);
+                    throw new Error('API 返回無效的回應');
+                }
+                
+                return data.candidates[0].content.parts[0].text;
+                
+            } catch (fetchError) {
+                clearTimeout(timeoutId);
+                console.error('網路請求錯誤:', fetchError);
+                
+                if (fetchError.name === 'AbortError') {
+                    throw new Error('請求超時，請稍後再試');
+                } else if (fetchError.message.includes('Failed to fetch') || fetchError.name === 'TypeError') {
+                    throw new Error('CORS 錯誤：請安裝 CORS 擴展或使用代理服務器');
+                } else {
+                    throw fetchError;
+                }
+            }
+        }
+
+        // 可行性檢查
+        async function checkFeasibility(originalPrompt) {
+            const feasibilityTemplate = `你是一個專業的技術顧問和項目評估專家。請分析以下用戶需求的可行性：
+
+用戶需求：${originalPrompt}
+
+評估標準：
+1. 技術可行性：是否能用現有技術實現
+2. 複雜度：實現難度如何
+3. 資源需求：需要什麼工具和技能
+4. 時間估算：大概需要多長時間
+
+請根據以下要求進行評估：
+- isFeasible: 判斷項目是否可行（true/false）
+- reason: 如果不可行，請使用繁體中文說明原因；如果可行，可以留空
+- recommendedTools: 從以下選項中選擇合適的工具：Github copilot, v0.dev, bolt.new, ChatGPT, stitch, Replit Agent
+- difficulty: 難度評分（1-10，1最簡單，10最困難）
+- technicalChallenges: 使用繁體中文列出可能遇到的技術挑戰`;
+            
+            const requestBody = {
+                contents: [{
+                    parts: [{
+                        text: feasibilityTemplate
+                    }]
+                }],
+                generationConfig: {
+                    temperature: 0.3,
+                    responseMimeType: "application/json",
+                    responseSchema: {
+                        type: "OBJECT",
+                        properties: {
+                            isFeasible: {
+                                type: "BOOLEAN"
+                            },
+                            reason: {
+                                type: "STRING"
+                            },
+                            recommendedTools: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "STRING"
+                                }
+                            },
+                            difficulty: {
+                                type: "INTEGER",
+                                minimum: 1,
+                                maximum: 10
+                            },
+                            technicalChallenges: {
+                                type: "ARRAY",
+                                items: {
+                                    type: "STRING"
+                                }
+                            }
+                        },
+                        required: ["isFeasible", "reason", "recommendedTools", "difficulty", "technicalChallenges"]
+                    }
+                }
+            };
+            
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000);
+            
+            try {
+                const response = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/${settings.selectedModel}:generateContent?key=${settings.apiKey}`,
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(requestBody),
+                        signal: controller.signal
+                    }
+                );
+                
+                clearTimeout(timeoutId);
+                
+                if (!response.ok) {
+                    throw new Error(`API 調用失敗 (${response.status})`);
+                }
+                
+                const data = await response.json();
+                const responseText = data.candidates[0].content.parts[0].text;
+                
+                try {
+                    const feasibilityResult = JSON.parse(responseText);
+                    
+                    return {
+                        isFeasible: Boolean(feasibilityResult.isFeasible),
+                        reason: String(feasibilityResult.reason || ""),
+                        recommendedTools: Array.isArray(feasibilityResult.recommendedTools) ? 
+                            feasibilityResult.recommendedTools : ["ChatGPT"],
+                        difficulty: Math.max(1, Math.min(10, Number(feasibilityResult.difficulty) || 5)),
+                        technicalChallenges: Array.isArray(feasibilityResult.technicalChallenges) ? 
+                            feasibilityResult.technicalChallenges : ["需要進一步分析技術需求"]
+                    };
+                } catch (parseError) {
+                    console.error('解析可行性結果失敗:', parseError);
+                    return {
+                        isFeasible: true,
+                        reason: "無法解析可行性分析結果，建議手動評估",
+                        recommendedTools: ["ChatGPT"],
+                        difficulty: 5,
+                        technicalChallenges: ["需要進一步分析技術需求"]
+                    };
+                }
+                
+            } catch (fetchError) {
+                clearTimeout(timeoutId);
+                throw fetchError;
+            }
+        }
+
+        // 顯示可行性評估結果
+        function showFeasibilityModal(feasibilityResult) {
+            const content = document.getElementById('feasibilityContent');
+            
+            const generateStars = (difficulty) => {
+                return '★'.repeat(difficulty) + '☆'.repeat(10 - difficulty);
+            };
+            
+            const generateToolTags = (tools) => {
+                return tools.map(tool => `<span class="tool-tag">${tool}</span>`).join('');
+            };
+            
+            const generateChallenges = (challenges) => {
+                return challenges.map(challenge => `<li>${challenge}</li>`).join('');
+            };
+            
+            let modalHTML = '';
+            
+            if (!feasibilityResult.isFeasible) {
+                modalHTML += `
+                    <div class="not-feasible">
+                        <h4>❌ 項目不可行</h4>
+                        <p>${feasibilityResult.reason}</p>
+                    </div>
+                `;
+            } else {
+                modalHTML += `
+                    <div class="feasibility-section">
+                        <h4>✅ 項目可行</h4>
+                        ${feasibilityResult.reason ? `<p>${feasibilityResult.reason}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            modalHTML += `
+                <div class="feasibility-section">
+                    <h4>建議工具</h4>
+                    <div class="tools-list">
+                        ${generateToolTags(feasibilityResult.recommendedTools)}
+                    </div>
+                </div>
+                
+                <div class="feasibility-section">
+                    <h4>難度評估</h4>
+                    <p>
+                        ${feasibilityResult.difficulty}/10
+                        <span class="difficulty-stars">${generateStars(feasibilityResult.difficulty)}</span>
+                    </p>
+                </div>
+                
+                <div class="feasibility-section">
+                    <h4>可能遇到的技術挑戰</h4>
+                    <ul>
+                        ${generateChallenges(feasibilityResult.technicalChallenges)}
+                    </ul>
+                </div>
+            `;
+            
+            content.innerHTML = modalHTML;
+            openModal('feasibilityModal');
+        }
+
+        // 快捷鍵處理
+        function handleKeyboardShortcut(event) {
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'E') {
+                event.preventDefault();
+                if (!enhanceBtn.disabled) {
+                    handleEnhance();
+                }
+            }
+            
+            if ((event.ctrlKey || event.metaKey) && event.shiftKey && event.key === 'Z') {
+                event.preventDefault();
+                if (isOptimized) {
+                    handleUndo();
+                }
+            }
+            
+            if (event.key === 'Escape') {
+                const openModal = document.querySelector('.modal[style*="flex"]');
+                if (openModal) {
+                    closeModal(openModal.id);
+                }
+            }
+        }
+
+        // 模態框控制
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'flex';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // 顯示通知
+        function showNotice(message, type = 'info') {
+            // 移除現有通知
+            const existingNotice = document.querySelector('.notice');
+            if (existingNotice) {
+                existingNotice.remove();
+            }
+            
+            const icons = {
+                success: '✅',
+                error: '❌',
+                warning: '⚠️',
+                info: 'ℹ️'
+            };
+            
+            const notice = document.createElement('div');
+            notice.className = `notice ${type}`;
+            notice.innerHTML = `
+                <span>${icons[type] || icons.info}</span>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notice);
+            
+            const duration = type === 'success' ? 2000 : type === 'info' ? 4000 : 3000;
+            
+            setTimeout(() => {
+                if (notice.parentNode) {
+                    notice.style.animation = 'slideInFromRight 0.3s ease-in reverse';
+                    setTimeout(() => notice.remove(), 300);
+                }
+            }, duration);
+        }
+    </script>
+</body>
+</html>

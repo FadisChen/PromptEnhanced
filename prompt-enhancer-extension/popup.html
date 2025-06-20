@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>優化 Prompt 設定</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="container">        
+        <div class="form-group">
+            <label for="apiKey">Gemini API Key</label>
+            <div class="input-group">
+                <input type="password" id="apiKey" placeholder="輸入您的 Gemini API Key">
+                <button id="testApiKey">測試 API Key</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="modelSelect">Gemini 模型</label>
+            <select id="modelSelect" disabled>
+                <option value="">請先設定 API Key</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="template">優化 Prompt 模板&nbsp;&nbsp;&nbsp;[使用 {{prompt}} 代表原始內容]</label>
+            <textarea id="template" rows="8" placeholder="你是一個專門優化提示詞（Prompt）的 AI 專家。請優化並補充以下提示：{{prompt}}"># 指令
+
+你是一個專門優化提示詞（Prompt）的 AI 專家。
+你的任務是根據我提供的「原始提示詞」，將其改寫為一個更清晰、更具體、結構更完整的提示詞，以引導 AI 模型產生更優質、更精準的輸出。
+
+# 規則
+
+- **絕對禁止**在你的回覆中包含任何解釋、前言、或任何形式的說明文字。
+- 你的回覆**只能也必須**是優化後的提示詞內容本身。
+- 不要使用引號或任何標記來包圍你的輸出。直接呈現純文字結果。
+
+# 原始提示詞
+
+{{prompt}}
+
+# 優化後的提示詞</textarea>
+        </div>
+
+        <div class="form-group">
+            <div class="feasibility-check">
+                <input type="checkbox" id="enableFeasibilityCheck">
+                <div class="feasibility-check-content">
+                    <label for="enableFeasibilityCheck">啟用可行性驗證</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="button-group">
+                <button id="saveSettings" class="save-btn">儲存設定</button>
+            </div>
+        </div>
+
+        <div class="shortcuts-info">
+            <h4>快捷鍵</h4>
+            <div class="shortcut-item">
+                <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>E</kbd> - 優化 Prompt
+            </div>
+            <div class="shortcut-item">
+                <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Z</kbd> - 還原 Prompt
+            </div>
+        </div>
+
+        <!-- <div id="status" class="status"></div> -->
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> 

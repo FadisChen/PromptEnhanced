@@ -1,0 +1,125 @@
+{
+  "name": "promptenhanced",
+  "displayName": "PromptEnhanced",
+  "description": "Use Gemini enhance your prompt",
+  "version": "1.0.0",
+  "publisher": "promptenhanced",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/promptenhanced/promptenhanced.git"
+  },
+  "engines": {
+    "vscode": "^1.96.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "promptenhanced.openSettings",
+        "title": "⚙️ 設定面板",
+        "category": "PromptEnhanced",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "promptenhanced.openOptimizer",
+        "title": "✨ 提示詞優化面板",
+        "category": "PromptEnhanced",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "promptenhanced.checkConfig",
+        "title": "📋 檢查配置狀態",
+        "category": "PromptEnhanced",
+        "icon": "$(checklist)"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "promptenhanced",
+          "title": "PromptEnhanced - 點擊開啟優化面板",
+          "icon": "$(sparkle)"
+        }
+      ]
+    },
+    "views": {
+      "promptenhanced": [
+        {
+          "id": "promptenhanced.welcome",
+          "name": "歡迎使用 PromptEnhanced",
+          "when": "true"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "promptenhanced.openOptimizer",
+          "when": "view == promptenhanced.welcome",
+          "group": "navigation",
+          "title": "開啟優化面板"
+        },
+        {
+          "command": "promptenhanced.openSettings",
+          "when": "view == promptenhanced.welcome",
+          "group": "navigation",
+          "title": "開啟設定面板"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "PromptEnhanced",
+      "properties": {
+        "promptenhanced.geminiApiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Gemini API Key"
+        },
+        "promptenhanced.geminiModelId": {
+          "type": "string",
+          "default": "gemini-2.5-flash",
+          "description": "Gemini Model ID"
+        },
+        "promptenhanced.enhancementTemplate": {
+          "type": "string",
+          "default": "# 指令\n你是一個專門優化提示詞（Prompt）的 AI 專家。你的任務是根據我提供的「原始提示詞」，將其改寫為一個更清晰、更具體、結構更完整的提示詞，以引導 AI 模型產生更優質、更精準的輸出。\n# 規則\n- **絕對禁止**在你的回覆中包含任何解釋、前言、或任何形式的說明文字。\n- 你的回覆**只能也必須**是優化後的提示詞內容本身。\n- 不要使用引號或任何標記來包圍你的輸出。直接呈現純文字結果。\n# 原始提示詞\n{{prompt}}\n# 優化後的提示詞\n",
+          "description": "提示詞強化模板"
+        },
+        "promptenhanced.translateToEnglish": {
+          "type": "boolean",
+          "default": false,
+          "description": "自動翻譯為英文"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.96.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3",
+    "ts-loader": "^9.5.2",
+    "webpack": "^5.99.7",
+    "webpack-cli": "^6.0.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}

@@ -1,0 +1,399 @@
+/* Prompt 強化器按鈕樣式 - 統一使用半透明毛玻璃效果 */
+.prompt-enhancer-btn {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 8px !important;
+    color: #ffffff !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    margin: 0 4px !important;
+    padding: 8px 12px !important;
+    transition: all 0.3s ease !important;
+    z-index: 10000 !important;
+    position: relative !important;
+    backdrop-filter: blur(10px) !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    line-height: 1 !important;
+    min-width: auto !important;
+    height: auto !important;
+    outline: none !important;
+    text-decoration: none !important;
+    vertical-align: middle !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+}
+
+.prompt-enhancer-btn:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.prompt-enhancer-btn:active {
+    background: rgba(255, 255, 255, 0.15) !important;
+}
+
+.prompt-enhancer-btn:disabled {
+    opacity: 0.8 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* 載入動畫 */
+.loading-spinner {
+    width: 14px !important;
+    height: 14px !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+    border-top: 2px solid white !important;
+    border-radius: 50% !important;
+    animation: spin 1s linear infinite !important;
+    display: inline-block !important;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* 提示訊息樣式 */
+.prompt-enhancer-notice {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    background: #ff6b6b !important;
+    color: white !important;
+    padding: 12px 16px !important;
+    border-radius: 8px !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    z-index: 10001 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    max-width: 300px !important;
+    line-height: 1.4 !important;
+    animation: slideInFromRight 0.3s ease-out !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+/* 不同類型的通知樣式 */
+.prompt-enhancer-notice.success {
+    background: linear-gradient(135deg, #4caf50 0%, #45a049 100%) !important;
+}
+
+.prompt-enhancer-notice.error {
+    background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%) !important;
+}
+
+.prompt-enhancer-notice.warning {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%) !important;
+}
+
+.prompt-enhancer-notice.info {
+    background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%) !important;
+}
+
+.prompt-enhancer-notice-icon {
+    font-size: 16px !important;
+    flex-shrink: 0 !important;
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutToRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+/* 確保按鈕在不同網站中的相容性 */
+
+/* 所有網站現在都使用統一的半透明毛玻璃效果 */
+
+/* Claude 特定樣式 */
+.claude-input-container .prompt-enhancer-btn {
+    flex-shrink: 0 !important;
+}
+
+/* Gemini 特定樣式 */
+toolbox-drawer-item ~ .prompt-enhancer-btn {
+    margin-right: 8px !important;
+}
+
+/* 通用覆蓋樣式 - 確保按鈕不被其他樣式影響 */
+.prompt-enhancer-btn * {
+    pointer-events: none !important;
+}
+
+.prompt-enhancer-btn:before,
+.prompt-enhancer-btn:after {
+    display: none !important;
+}
+
+/* 還原按鈕樣式 - 統一使用半透明毛玻璃效果 */
+.prompt-undo-btn {
+    background: rgba(255, 165, 0, 0.1) !important;
+    border: 1px solid rgba(255, 165, 0, 0.3) !important;
+    border-radius: 8px !important;
+    color: #ffa500 !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    margin: 0 4px !important;
+    padding: 8px 12px !important;
+    transition: all 0.3s ease !important;
+    z-index: 10000 !important;
+    position: relative !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-weight: 500 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(10px) !important;
+    min-width: auto !important;
+    line-height: 1 !important;
+    height: auto !important;
+}
+
+.prompt-undo-btn:hover {
+    background: rgba(255, 165, 0, 0.2) !important;
+    border-color: rgba(255, 165, 0, 0.4) !important;
+}
+
+.prompt-undo-btn:active {
+    background: rgba(255, 165, 0, 0.15) !important;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* 可行性驗證彈窗樣式 */
+.feasibility-modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 10002 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+.feasibility-modal-content {
+    background: #2a2a2a !important;
+    border-radius: 12px !important;
+    padding: 24px !important;
+    max-width: 500px !important;
+    width: 90% !important;
+    max-height: 80vh !important;
+    overflow-y: auto !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6) !important;
+    animation: modalFadeIn 0.3s ease-out !important;
+    position: relative;
+}
+
+.feasibility-modal h3 {
+    color: #f0f0f0 !important;
+    margin: 0 0 16px 0 !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-align: center !important;
+}
+
+.feasibility-section {
+    margin-bottom: 16px !important;
+}
+
+.feasibility-section h4 {
+    color: #e0e0e0 !important;
+    margin: 0 0 8px 0 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.feasibility-section p {
+    color: #ccc !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+}
+
+.feasibility-section ul {
+    color: #ccc !important;
+    margin: 0 !important;
+    padding-left: 20px !important;
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+}
+
+.feasibility-section li {
+    margin-bottom: 4px !important;
+}
+
+.difficulty-stars {
+    color: #ffd700 !important;
+    font-size: 16px !important;
+    margin-left: 8px !important;
+}
+
+.tools-list {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+    margin-top: 8px !important;
+}
+
+.tool-tag {
+    background: rgba(33, 150, 243, 0.2) !important;
+    color: #2196F3 !important;
+    padding: 4px 8px !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+    border: 1px solid rgba(33, 150, 243, 0.3) !important;
+    font-weight: 500 !important;
+}
+
+.feasibility-actions {
+    display: flex !important;
+    gap: 12px !important;
+    margin-top: 20px !important;
+    justify-content: flex-end !important;
+}
+
+.feasibility-actions button {
+    margin: 0 !important;
+    padding: 10px 20px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    font-family: inherit !important;
+}
+
+.continue-btn {
+    background: rgba(76, 175, 80, 0.2) !important;
+    border: 1px solid rgba(76, 175, 80, 0.4) !important;
+    color: #4CAF50 !important;
+}
+
+.continue-btn:hover {
+    background: rgba(76, 175, 80, 0.3) !important;
+}
+
+.cancel-btn {
+    background: rgba(244, 67, 54, 0.2) !important;
+    border: 1px solid rgba(244, 67, 54, 0.4) !important;
+    color: #f44336 !important;
+}
+
+.cancel-btn:hover {
+    background: rgba(244, 67, 54, 0.3) !important;
+}
+
+.not-feasible {
+    background: rgba(244, 67, 54, 0.1) !important;
+    border: 1px solid rgba(244, 67, 54, 0.3) !important;
+    border-radius: 8px !important;
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+}
+
+.not-feasible h4 {
+    color: #f44336 !important;
+    margin: 0 0 8px 0 !important;
+}
+
+.not-feasible p {
+    color: #ffcdd2 !important;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 關閉按鈕樣式 */
+.close-modal-btn {
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    background: none !important;
+    border: none !important;
+    font-size: 24px !important;
+    color: #ccc !important;
+    cursor: pointer !important;
+    line-height: 1 !important;
+    padding: 5px !important;
+    transition: color 0.2s ease !important;
+    z-index: 10003 !important;
+}
+
+.close-modal-btn:hover {
+    color: #f0f0f0 !important;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    .prompt-enhancer-btn {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+    }
+    
+    .prompt-enhancer-notice {
+        max-width: 250px !important;
+        font-size: 13px !important;
+        right: 10px !important;
+        top: 10px !important;
+    }
+    
+    .prompt-undo-btn {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
+    }
+    
+    .feasibility-modal-content {
+        width: 95% !important;
+        padding: 20px !important;
+        max-height: 90vh !important;
+    }
+    
+    .feasibility-actions {
+        flex-direction: column !important;
+    }
+    
+    .feasibility-actions button {
+        width: 100% !important;
+    }
+    
+    .tools-list {
+        justify-content: center !important;
+    }
+} 
